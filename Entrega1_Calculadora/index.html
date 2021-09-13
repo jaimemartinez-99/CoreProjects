@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Calculadora</title>
+  <link href= "D:\estilo.css" rel= "stylesheet" type= "text/css">
+  <meta charset="utf-8">
+  <script type="text/javascript">
+
+    let operador = "";
+    let acumulador = 0;
+  
+    const vaciar = () => {
+      document.getElementById("pantalla").value = "";
+    }
+
+    const comparar = (a,b) => {
+      return a-b;
+    }
+
+// OPERADORES UNITARIOS
+
+const cuadrado = () => {
+      if (!validar()) return; 
+        let num = document.getElementById("pantalla");
+        num.value = num.value * num.value;
+        rellenar_info();
+    }
+
+    const mod = () => {
+      if (!validar()) return;
+        let num = document.getElementById("pantalla");
+        if (num.value >= 0){
+          num.value = num.value;
+            }else{
+          num.value = -1*num.value;
+        }
+        rellenar_info();
+  }
+
+    const fact = () => {
+      if (!validar()) return;
+        let num = document.getElementById("pantalla");
+        let f = 1;
+        for (let i=num.value; i>0; i--)
+          f *= i;
+          num.value = f;
+          rellenar_info();   
+  }
+
+// OPERADORES BINARIOS
+
+    const mul = () => {
+      if (!validar()) return;
+        operadores("*")
+        vaciar();
+        rellenar_info();
+  }
+
+    const add = () => {
+      if (!validar()) return;
+        operadores("+");
+        vaciar();
+        rellenar_info();
+  }
+
+    const eq = () => {
+      if (!validar()) return;
+        let num = document.getElementById("pantalla");
+        operadores("");
+        num.value = acumulador;
+        rellenar_info();
+  }
+    
+    const operadores = (newop) => {
+      let num = document.getElementById("pantalla");
+        switch (operador) {
+          case "+":
+            acumulador += Number(num.value);
+            break;
+          case "*":
+            acumulador *= Number(num.value);
+            break;
+          default:
+            acumulador = Number(num.value);
+        }
+        operador = newop;
+    }
+
+// OPERADORES FORMATO CSV
+
+    const sumatorio = () => {
+      if (!validar()) return;
+        let num = document.getElementById("pantalla");
+        let list = num.value.split(",")
+        let i=0, resultado=0;
+          while (i<list.length)
+          resultado += Number(list[i++]);
+          num.value=resultado;
+          rellenar_info();
+  }
+
+    const ordenar = () => {
+      if (!validar()) return;
+        let num = document.getElementById("pantalla");
+        let list = num.value.split(",")
+        num.value = list.sort(comparar);
+  }
+    
+    const revertir = () => {
+      if (!validar()) return;
+        let num = document.getElementById("pantalla");
+        let list = num.value.split(",")
+        num.value = list.reverse();
+  }
+
+    const quitar = () => {
+      if (!validar()) return;
+        let num = document.getElementById("pantalla");
+        let list = num.value.split(",")
+        num.value = list.slice(0,-1);
+  }
+
+// RELLENAR INFO
+
+    const rellenar_info = () => {
+      let num = document.getElementById("pantalla");
+      let message = document.getElementById("info");
+      if (num.value < 100){
+            message.innerHTML= "Info: El resultado es menor que 100";
+      }
+      if (num.value==100||num.value==200) {
+            message.innerHTML= "Info: El resultado está entre 100 y 200";
+      }
+      if (num.value>100 && num.value<200){
+          message.innerHTML= "Info: El resultado está entre 100 y 200";
+      }
+      if (num.value>200){
+            message.innerHTML= "Info: El resultado es superior a 200";
+      }
+    }
+
+// TRATAMIENTO DE ERRORES
+const validar = () => {
+      let num = document.getElementById("pantalla");
+      let list = num.value.split(",");
+
+      if(list.length === 1 ) {
+        if (isNaN(num.value)) {
+          num.value = "Error";
+          return false;
+        }
+        return  true;
+      } else {
+        for(let i = 0; i < list.length; i++) {
+          if (isNaN(Number(list[i]))) {
+            num.value = "Error";
+            return false;
+          }
+        }
+        return true;
+      }
+    }
+      </script>
+</head>
+<body>
+  <h1 class="titulo"> Calculadora de CORE</h1>
+  <h2 class="nombre">Jaime Martínez Ramón</h2>
+  <h2 class="cajita">>Número:</h2>
+  <input type="text" id="pantalla" class="pantalla" onclick="vaciar()">
+  <p></p>
+  <h2 id="info" class="grande" title="Info sobre el número" >Info sobre el número</h2>
+  <div class="div"></div>
+  <h3> Operaciones unitarias</h3>
+  <p></p>
+  <button id="cuadrado" class= "cuadrado" onclick="cuadrado()">x<sup>2</sup></button>
+  <button id="modulo" class="modulo" onclick="mod()">Mod</button>
+  <button id="factorial" class="factorial" onclick="fact()">x!</button>
+  <p></p>
+  </div>
+  <div class="div2">
+  <h3> Operaciones binarias</h3>
+  <button id="multiplicacion" class ="multiplicacion" onclick="mul()">X</button>
+  <button id="suma" class="suma" onclick="add()">+</button>
+  <button id="igual" class="igual" onclick="eq()">=</button>
+  </div>
+  <h3> Operaciones en formato CSV</h3>
+  <button id="sumatorio" class="sumatorio" onclick="sumatorio()">Σx</button>
+  <button id="ordenar" class="ordenar" onclick="ordenar()">ordenar</button>
+  <button id="revertir" class="revertir" onclick="revertir()">revertir</button>
+  <button id="quitar" class= "quitar" onclick="quitar()">quitar</button>
+
+</body>
+</html>
